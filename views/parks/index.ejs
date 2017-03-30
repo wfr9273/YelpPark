@@ -1,0 +1,30 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>Welcome to YelpPark!</h1>
+            <p>View our hand-picked parks in the United States</p>
+            <p>
+                <a href="/parks/new" class="btn btn-primary btn-large">Add New Park</a>
+            </p>
+        </div>
+    </header>
+    <div class="row text-center" style="display: flex; flex-wrap: wrap;">
+        <% parks.forEach(function(park) { %>
+            <div class="col-md-3 col-sm-6">
+                <div class="thumbnail small">
+                    <img src="<%= park.image %>"></img>
+                    <dvi class="caption">
+                        <h4><%= park.name %></h4>
+                    </dvi>
+                    <p>
+                        <a href="/parks/<%= park._id %>" class="btn btn-primary">More Info</a>
+                    </p>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<% include ../partials/footer %>
