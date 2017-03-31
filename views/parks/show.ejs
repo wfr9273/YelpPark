@@ -10,6 +10,7 @@
                 <li class="list-group-item">Info 3</li>
             </div>
             <div id="map"></div>
+            
         </div>
         <div class="col-md-9">
             <div class="thumbnail">
@@ -58,7 +59,7 @@
             var lat = <%= park.lat %>;
             var lng = <%= park.lng %>;
             var center = {lat: lat, lng: lng};
-            var map = new google.maps.Map(document.getElementById('map'), {
+            var map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 8,
                 center: center,
                 scrollwheel: false
