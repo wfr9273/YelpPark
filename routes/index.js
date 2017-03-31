@@ -24,7 +24,7 @@ router.post("/register", function(req, res) {
             return;
         }
         passport.authenticate("local")(req, res, function() {
-            req.flash("success", "Welcome to YelpPark" + user.username + "!");
+            req.flash("success", "Welcome to YelpPark " + user.username + "!");
             res.redirect("/parks");
         });
     });
@@ -39,7 +39,8 @@ router.get("/login", function(req, res) {
 router.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/parks",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true
     }), function(req, res) {
 });
 

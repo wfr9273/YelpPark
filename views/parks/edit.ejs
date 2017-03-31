@@ -15,7 +15,8 @@
                     <input class="form-control" type="text" value="<%= park.image %>" name="park[image]">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" value="<%= park.description %>" name="park[description]">
+                    <!--<input class="form-control" type="text" value="<%= park.description %>" name="park[description]">-->
+                    <textarea class="form-control" name="park[description]" rows="10px"><%= park.description %></textarea>
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="text" name="park[location]" value="<%= park.location %>">
