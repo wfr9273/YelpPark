@@ -1,7 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var Park = require("../models/park");
+var Comment = require("../models/comment");
 var middleware = require("../middleware");
+var geocoder = require("geocoder");
 
 // INDEX - show all parks
 router.get("/", function(req, res) {
@@ -21,23 +23,26 @@ router.post("/", middleware.isLogin, function(req, res) {
     var name = req.body.name;
     var url = req.body.image;
     var desc = req.body.description;
-    var price = req.body.price;
-    var location = req.body.location;
     var author = {
         id: req.user._id,
         username: req.user.username
     };
-    var newPark = {name: name, image: url, description: desc, author: author, price: price, location: location};
-    // create a new campground and save to DB
-    Park.create(newPark, function(err, park) {
-        if (err) {
-            req.flash("error", "Something went wrong!");
-            console.log(err);
-        }
-        else {
-            req.flash("success", "Successfully added park");
-            res.redirect("/parks");
-        }
+    geocoder.geocode(req.body.location, function (err, data) {
+        var lat = data.results[0].geometry.location.lat;
+        var lng = data.results[0].geometry.location.lng;
+        var location = data.results[0].formatted_address;
+        var newPark = {name: name, image: url, description: desc, author:author, location: location, lat: lat, lng: lng};
+        // Create a new campground and save to DB
+        Park.create(newPark, function(err, park){
+            if (err) {
+                req.flash("error", "Something went wrong!");
+                console.log(err);
+            }  
+            else {
+                req.flash("success", "Successfully added park");
+                res.redirect("/parks");
+            }
+        });
     });
 });
 
@@ -68,8 +73,15 @@ router.get("/:id/edit", middleware.checkParkOwnership, function(req, res) {
 
 // UPDATE PARK ROUTE
 router.put("/:id", middleware.checkParkOwnership, function(req, res) {
-    Park.findByIdAndUpdate(req.params.id, req.body.park, function(err, updatedPark) {
-        res.redirect("/parks/" + req.params.id);
+    geocoder.geocode(req.body.location, function(err, data) {
+        var lat = data.results[0].geometry.location.lat;
+        var lng = data.results[0].geometry.location.lng;
+        var location = data.results[0].formatted_address;
+        var newData = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, lng: lng};
+        Park.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, updatedPark){
+            req.flash("success","Successfully Updated!");
+            res.redirect("/parks/" + req.params.id);
+        });
     });
 });
 

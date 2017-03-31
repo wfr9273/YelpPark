@@ -1,6 +1,5 @@
 <% include ../partials/header %>
 
-<div class="container">
     <div class="row">
         <!-- Side Bar -->
         <div class="col-md-3">
@@ -10,24 +9,12 @@
                 <li class="list-group-item">Info 2</li>
                 <li class="list-group-item">Info 3</li>
             </div>
-            <div>
-                <iframe
-                    title="GoogleMaps"
-                    width="100%"
-                    height="260"
-                    frameborder="0"
-                    scrolling="no"
-                    marginheight="0"
-                    marginwidth="0"
-                    src="https://maps.google.com/maps?q=<%= park.location %>&amp;z=11&amp;output=embed">
-                </iframe>
-            </div>
+            <div id="map"></div>
         </div>
         <div class="col-md-9">
             <div class="thumbnail">
                 <img class="image-responsive" src="<%= park.image %>"></img>
                 <div class="caption-full">
-                    <h4 class="pull-right">$<%= park.price %>/night</h4>
                     <h4><a><%= park.name %></a></h4>
                     <p><%= park.description %></p>
                     <p><em>Submitted By <%= park.author.username %></em></p>
@@ -65,6 +52,34 @@
             </div>
         </div>
     </div>
-</div>
+    
+    <script>
+        function initMap() {
+            var lat = <%= park.lat %>;
+            var lng = <%= park.lng %>;
+            var center = {lat: lat, lng: lng};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 8,
+                center: center,
+                scrollwheel: false
+            });
+            var contentString = `
+              <strong><%= park.name %><br />
+              <%= park.location %></strong>
+              <p><%= park.description %></p>
+            `
+            var infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: center,
+                map: map
+            });
+            marker.addListener('click', function() {
+              infowindow.open(map, marker);
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDCDyipj8mj3VhXKzhqu-BshotVxrznyY&callback=initMap"></script>
 
 <% include ../partials/footer %>
