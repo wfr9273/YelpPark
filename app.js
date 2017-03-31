@@ -5,7 +5,7 @@ var express         = require("express"),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     methodOverride  = require("method-override"),
-    flash           = require("connect-flash");
+    flash           = require("connect-flash")
 
 var Park            = require("./models/park"),
     Comment         = require("./models/comment"),
@@ -16,8 +16,8 @@ var commentRoutes = require("./routes/comments"),
     parkRoutes    = require("./routes/parks"),
     authRoutes    = require("./routes/index");
     
-//var seedDB = require("./seeds");
-//seedDB();
+var seedDB = require("./seeds");
+seedDB();
 
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_park";
 mongoose.connect(url);
