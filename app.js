@@ -20,6 +20,7 @@ var commentRoutes = require("./routes/comments"),
 //seedDB();
 
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_park";
+mongoose.connect(url);
 //mongoose.connect("mongodb://localhost/yelp_park");
 //mongoose.connect("mongodb://wfrYelpPark:199273@ds139438.mlab.com:39438/yelppark");
 
